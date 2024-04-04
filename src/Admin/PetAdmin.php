@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Admin;
 
+use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -40,7 +41,12 @@ final class PetAdmin extends AbstractAdmin
     {
         $form
             ->add('name')
-            ->add('description')
+            ->add('description', CKEditorType::class, array(
+                'config' => array(
+                    'uiColor' => '#ffffff',
+                    //...
+                ),
+            ));
         ;
     }
 
