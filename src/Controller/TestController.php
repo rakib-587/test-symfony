@@ -7,23 +7,32 @@ use Lexik\Bundle\JWTAuthenticationBundle\Security\Http\Authentication\Authentica
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
 
 class TestController extends AbstractController
 {
-    #[Route('/test', name: 'app_test')]
-    public function index(
+    #[Route('/api/test', name: 'app_api_test')]
+    public function index(): JsonResponse
+    {
+        dd($this->getUser());
+    }
+
+    #[Route('/api/create_refresh_token', name: 'app_create_refresh_token')]
+    public function createRefreshToken(
         UserRepository $userRepo,
         JWTTokenManagerInterface $JWTManager,
         #[Autowire(service: 'lexik_jwt_authentication.handler.authentication_success')]
         AuthenticationSuccessHandler $handler,
+        ContainerBagInterface $bag,
     ): JsonResponse
     {
-        $user = $userRepo->find(1);
-        $jwt = $JWTManager->createFromPayload($user, ['a' => 'b']);
+        dd($bag->get('gesdinet_jwt_refresh_token.ttl'));
+        // $user = $userRepo->find(1);
+        // $jwt = $JWTManager->createFromPayload($user, ['a' => 'b']);
 
-        return $handler->handleAuthenticationSuccess($user, $jwt);
+        // return $handler->handleAuthenticationSuccess($user, $jwt);
     }
 
     #[Route('/parse', name: 'app_parse')]
